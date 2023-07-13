@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import { Link, useParams} from 'react-router-dom'
+import {db} from '../Firebase.js'
+import {collection, updateDoc, doc} from 'firebase/firestore'
 
 function StudentEdit() {
 
@@ -25,7 +27,7 @@ function StudentEdit() {
         setStudent({...student, [e.target.name]: e.target.value});
     }
 
-    const updateStudent = (e) => {
+    const updateStudent = async(e) => {
         e.preventDefault();
 
         const data = {
@@ -36,6 +38,8 @@ function StudentEdit() {
         }
 
         // save
+        const applicationDoc = doc(db, "applications", id)
+        await updateDoc(applicationDoc, data);
         
     }
 

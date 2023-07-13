@@ -1,11 +1,13 @@
-import axios from 'axios'
 import React, {useEffect, useState} from 'react'
 import { Link } from 'react-router-dom'
+import {db} from '../Firebase.js'
+import {collection, getDocs, doc, deleteDoc} from 'firebase/firestore'
 
 function Student() {
 
     const [students, setStudents] = useState([]);
 
+    const applicationCollectionRef = collection(db, "applications")
     useEffect( () => {
 
             // axios.get().then(res => {
@@ -29,14 +31,24 @@ function Student() {
             ]
             setStudents(students1);
 
+            const getApplications = async() => {
+                const data = await getDocs(applicationCollectionRef);
+                console.log(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
+            }
+
+            getApplications()
+
     },[])
 
-    const deleteStudent = (e, id) => {
+    const deleteStudent = async(e, id) => {
         e.preventDefault();
         const thisClicked = e.currentTarget;
         thisClicked.innerText = "Deleting...";
 
         // Delete
+        const applicationDoc = doc(db, "applications", id);
+        await deleteDoc(applicationDoc);
+
         // thisClicked.closest("tr").remove();
 
     }

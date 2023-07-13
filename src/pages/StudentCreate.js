@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios';
+import {db} from '../Firebase.js'
+import {collection, addDoc} from 'firebase/firestore'
 
 function StudentCreate() {
 
     const navigate = useNavigate()
+    const applicationCollectionRef = collection(db, "applications")
 
     const [student, setStudent] = useState({
         name: '',
@@ -18,15 +20,17 @@ function StudentCreate() {
         setStudent({...student, [e.target.name]: e.target.value});
     }
 
-    const saveStudent = (e) => {
+    const saveStudent = async(e) => {
         e.preventDefault();
 
-        const data = {
-            name: student.name,
-            email: student.email,
-            phone: student.phone,
-            course: student.course,
-        }
+        // const data = {
+        //     name: student.name,
+        //     email: student.email,
+        //     phone: student.phone,
+        //     course: student.course,
+        // }
+
+        await addDoc(applicationCollectionRef, {title: "abc", description: "ddd"});
 
         // save
         navigate('/students')
