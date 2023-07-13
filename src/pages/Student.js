@@ -10,33 +10,16 @@ function Student() {
     const applicationCollectionRef = collection(db, "applications")
     useEffect( () => {
 
-            // axios.get().then(res => {
-                
-            // });
-            var students1 = [
-                {
-                    "id": 1,
-                    "name": "khoa",
-                    "course": "abc",
-                    "email": "angu0093@student.monash",
-                    "phone": "9132912391"
-                },
-                {
-                    "id": 2,
-                    "name": "khoa2",
-                    "course": "abcd",
-                    "email": "angu0023@student.monash",
-                    "phone": "2222222"
-                }
-            ]
-            setStudents(students1);
 
             const getApplications = async() => {
                 const data = await getDocs(applicationCollectionRef);
                 console.log(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
+                setStudents(data.docs.map((doc) => ({...doc.data(), id: doc.id})))
             }
 
             getApplications()
+
+
 
     },[])
 
@@ -63,7 +46,7 @@ function Student() {
                 <td> {item.email} </td>
                 <td> {item.phone} </td>
                 <td>
-                    <Link to={`/students/${item.id}/edit`} className="btn btn-success">Edit</Link>
+                    <Link to={`/students/${students[index].id}/edit`} className="btn btn-success">Edit</Link>
                 </td>
                 <td>
                     <button type="button" onClick={(e) => deleteStudent(e, item.id)} className="btn btn-danger">Delete</button>
@@ -79,8 +62,8 @@ function Student() {
                         <div className="col-md-12">
                             <div className="card">
                                 <div className="card-header">
-                                    <h4> Students List
-                                        <Link to="/students/create" className="btn btn-primary float-end">Add Student</Link>
+                                    <h4> Applications List
+                                        <Link to="/students/create" className="btn btn-primary float-end">Add Application</Link>
                                     </h4>
                                 </div>
                                 <div className="card-body">
@@ -88,10 +71,10 @@ function Student() {
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>Name</th>
-                                                <th>Course</th>
-                                                <th>Email</th>
-                                                <th>Phone</th>
+                                                <th>Application Name</th>
+                                                <th>Purpose</th>
+                                                <th>Type</th>
+                                                <th>Description</th>
                                                 <th>Edit</th>
                                                 <th>Delete</th>
                                             </tr>

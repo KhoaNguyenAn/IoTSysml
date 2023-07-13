@@ -1,40 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
-import {db} from '../Firebase.js'
-import {collection, addDoc} from 'firebase/firestore'
+import { db } from '../Firebase.js'
+import { collection, addDoc } from 'firebase/firestore'
+import { v4 as uuidv4 } from 'uuid';
 
 function StudentCreate() {
+    const navigate = useNavigate();
+    const applicationCollectionRef = collection(db, "applications");
+    const nameRef = useRef(null);
+    const emailRef = useRef(null);
+    const phoneRef = useRef(null);
+    const courseRef = useRef(null);
 
-    const navigate = useNavigate()
-    const applicationCollectionRef = collection(db, "applications")
+    const saveStudent = () => {
 
-    const [student, setStudent] = useState({
-        name: '',
-        email:'',
-        phone:'',
-        course:''
-    })
+        const id = uuidv4();
+        const name = nameRef.current.value;
+        const email = emailRef.current.value;
+        const phone = phoneRef.current.value;
+        const course = courseRef.current.value;
+        const device = [];
+        console.log( {id, name, email, phone, course })
 
-    const handleInput = (e) => {
-        e.persist();
-        setStudent({...student, [e.target.name]: e.target.value});
-    }
+        const newUser = {
+            id: id, // Generate a unique ID
+            name: name,
+            email: email,
+            phone: phone,
+            course: course
+          };
 
-    const saveStudent = async(e) => {
-        e.preventDefault();
-
-        // const data = {
-        //     name: student.name,
-        //     email: student.email,
-        //     phone: student.phone,
-        //     course: student.course,
-        // }
-
-        await addDoc(applicationCollectionRef, {title: "abc", description: "ddd"});
-
-        // save
-        navigate('/students')
+        addDoc(applicationCollectionRef,  newUser);
         
+        navigate('/students');
     }
 
     return (
@@ -44,7 +42,7 @@ function StudentCreate() {
                     <div className="col-md-12">
                         <div className="card">
                             <div className="card-header">
-                                <h4> Add Student
+                                <h4> Add Application
                                     <Link to="/students" className="btn btn-danger float-end">
                                         Back
                                     </Link>
@@ -53,23 +51,23 @@ function StudentCreate() {
                             <div className="card-body">
                                 <form onSubmit={saveStudent}>
                                     <div className="mb-3">
-                                        <label>Name</label>
-                                        <input type="text" name="name" value={student.name} onchange={handleInput} className="form-control" />
+                                        <label>Application Name</label>
+                                        <input type="text" ref={nameRef} className="form-control" />
                                     </div>
                                     <div className="mb-3">
-                                        <label>Email</label>
-                                        <input type="text" name="email" value={student.email} onchange={handleInput} className="form-control" />
+                                        <label>Purpose</label>
+                                        <input type="text" ref={emailRef} className="form-control" />
                                     </div>
                                     <div className="mb-3">
-                                        <label>Phone</label>
-                                        <input type="text" name="phone" value={student.phone} onchange={handleInput} className="form-control" />
+                                        <label>Type</label>
+                                        <input type="text" ref={phoneRef} className="form-control" />
                                     </div>
                                     <div className="mb-3">
-                                        <label>Course</label>
-                                        <input type="text" name="course" value={student.course} onchange={handleInput} className="form-control" />
+                                        <label>Description</label>
+                                        <input type="text" ref={courseRef} className="form-control" />
                                     </div>
                                     <div className="mb-3">
-                                        <button type="submit" className="btn btn-primary">Save Student</button>
+                                        <button type="submit" className="btn btn-primary">Save Application</button>
                                     </div>
                                 </form>
                             </div>
