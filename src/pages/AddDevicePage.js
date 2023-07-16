@@ -12,6 +12,7 @@ function AddDevicePage() {
   const applicationCollectionRef = collection(db, 'applications');
   const nameRef = useRef(null);
   const emailRef = useRef(null);
+  const descriptionRef = useRef(null);
   const searchParams = new URLSearchParams(location.search);
   const studentId = searchParams.get('studentId');
   const [isLoading, setIsLoading] = useState(true);
@@ -22,7 +23,7 @@ function AddDevicePage() {
   const [refresh, setRefresh] = useState(false)
 
 
-  console.log(id, studentId);
+  // console.log(studentId);
 
   useEffect(() => {
 
@@ -49,8 +50,8 @@ function AddDevicePage() {
   }, []);
 
   const getDataFromId = () => {
-    console.log("hi")
-    console.log(students)
+    // console.log("hi")
+    // console.log(students)
     for (let i = 0; i < students.length; i++) {
       if (students[i].id === studentId) {
         if (students[i].devices) {
@@ -60,6 +61,7 @@ function AddDevicePage() {
                 setDevice(students[i].devices[j]);
                 nameRef.current.value = students[i].devices[j].name;
                 emailRef.current.value = students[i].devices[j].id;
+                descriptionRef.current.value = students[i].devices[j].description;
             }
           }
         }
@@ -75,7 +77,7 @@ function AddDevicePage() {
         if (student.devices) {
           const updatedDevices = student.devices.map((dev) => {
             if (dev.id === id) {
-              return { ...dev, name: nameRef.current.value, id: emailRef.current.value };
+              return { ...dev, name: nameRef.current.value, id: emailRef.current.value, description: descriptionRef.current.value };
             }
             return dev;
           });
@@ -170,6 +172,10 @@ function AddDevicePage() {
                   </div>
                   <div className="mb-3">
                     <label>Description</label>
+                    <input type="text" ref={descriptionRef} className="form-control" />
+                  </div>
+                  <div className="mb-3">
+                    <label>ID</label>
                     <input type="text" ref={emailRef} className="form-control" />
                   </div>
 
