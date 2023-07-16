@@ -131,15 +131,15 @@ function StudentEdit() {
                                         <input type="text" name="name" value={student.name} onChange={handleInput} className="form-control" />
                                     </div>
                                     <div className="mb-3">
-                                        <label>Email</label>
+                                        <label>Purpose</label>
                                         <input type="text" name="email" value={student.email} onChange={handleInput} className="form-control" />
                                     </div>
                                     <div className="mb-3">
-                                        <label>Phone</label>
+                                        <label>Type</label>
                                         <input type="text" name="phone" value={student.phone} onChange={handleInput} className="form-control" />
                                     </div>
                                     <div className="mb-3">
-                                        <label>Course</label>
+                                        <label>Description</label>
                                         <input type="text" name="course" value={student.course} onChange={handleInput} className="form-control" />
                                     </div>
                                     <div className="mb-3">

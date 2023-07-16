@@ -28,11 +28,11 @@ function AddDevicePage() {
   useEffect(() => {
 
     for (let i = 0; i < students.length; i++) {
-        if (students[i].id === studentId) {
-            setStudentIndex(i)
-        }
+      if (students[i].id === studentId) {
+        setStudentIndex(i)
+      }
     }
-    
+
 
 
     const getApplications = async () => {
@@ -57,11 +57,11 @@ function AddDevicePage() {
         if (students[i].devices) {
           for (let j = 0; j < students[i].devices.length; j++) {
             if (students[i].devices[j].id === id) {
-                console.log(students[i].devices[j])
-                setDevice(students[i].devices[j]);
-                nameRef.current.value = students[i].devices[j].name;
-                emailRef.current.value = students[i].devices[j].id;
-                descriptionRef.current.value = students[i].devices[j].description;
+              console.log(students[i].devices[j])
+              setDevice(students[i].devices[j]);
+              nameRef.current.value = students[i].devices[j].name;
+              emailRef.current.value = students[i].devices[j].id;
+              descriptionRef.current.value = students[i].devices[j].description;
             }
           }
         }
@@ -217,57 +217,79 @@ function DeviceSensors({ sensors, addSensor, deleteSensor }) {
   };
 
   return (
-    <div>
-      <h4>Sensors</h4>
-      <ul>
-        {sensors &&
-          sensors.map((sensor) => (
-            <li key={sensor.id}>
-              {sensor.name} - {sensor.value}
-              <button type="button" onClick={() => deleteSensor(sensor.id)} className="btn btn-danger btn-sm">
-                Delete
-              </button>
-            </li>
-          ))}
-      </ul>
-      <button type="button" onClick={handleShow} className="btn btn-primary">
-        Add Sensor
-      </button>
+    <div className="card">
+      <div className="card-header">
+        <h4> Sensors List </h4>
+      </div>
+      <div className="card-body">
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Value</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sensors &&
+              sensors.map((sensor) => (
+                <tr key = {sensor.id}>
+                  <td> {sensor.id} </td>
+                  <td> {sensor.name} </td>
+                  <td> {sensor.value} </td>
+                  <td>
+                      <Link to={`/sensor/${sensor.id}/edit`} className="btn btn-success">Edit</Link>
+                  </td>
+                  <td>
+                      <button type="button" onClick={() => deleteSensor(sensor.id)} className="btn btn-danger">
+                           Delete
+                      </button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+        <button type="button" onClick={handleShow} className="btn btn-primary">
+          Add Sensor
+        </button>
+      </div>
 
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add Sensor</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="mb-3">
-            <label>Sensor Name</label>
-            <input
-              type="text"
-              className="form-control"
-              value={sensorName}
-              onChange={(e) => setSensorName(e.target.value)}
-            />
-          </div>
-          <div className="mb-3">
-            <label>Sensor Value</label>
-            <input
-              type="text"
-              className="form-control"
-              value={sensorValue}
-              onChange={(e) => setSensorValue(e.target.value)}
-            />
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleSaveSensor}>
-            Save Sensor
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add Sensor</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="mb-3">
+              <label>Sensor Name</label>
+              <input
+                type="text"
+                className="form-control"
+                value={sensorName}
+                onChange={(e) => setSensorName(e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <label>Sensor Value</label>
+              <input
+                type="text"
+                className="form-control"
+                value={sensorValue}
+                onChange={(e) => setSensorValue(e.target.value)}
+              />
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleSaveSensor}>
+              Save Sensor
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
   );
 }
 
