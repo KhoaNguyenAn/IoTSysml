@@ -55,6 +55,7 @@ function StudentEdit() {
     const addDevice = async (deviceName, description) => {
         var device = {
             name: deviceName,
+            description: description,
             id: uuidv4(),
         }
 
@@ -117,7 +118,7 @@ function StudentEdit() {
                     <div className="col-md-12">
                         <div className="card">
                             <div className="card-header">
-                                <h4> Edit Student
+                                <h4> Edit Application
                                     <Link to="/students" className="btn btn-danger float-end">
                                         Back
                                     </Link>
@@ -142,24 +143,41 @@ function StudentEdit() {
                                         <input type="text" name="course" value={student.course} onChange={handleInput} className="form-control" />
                                     </div>
                                     <div className="mb-3">
-                                        <button type="submit" className="btn btn-primary">Update Student</button>
+                                        <button type="submit" className="btn btn-primary">Update Application</button>
                                     </div>
                                     <DevicePopup addDevice={addDevice} />
-                                    <div>
-                                        {console.log()}
-                                        <h4>Devices</h4>
-                                        <ul>
-                                            {student.devices && student.devices.map((device) => (
-                                                <li key={device.id}>
-                                                    {device.name} - {device.description}
-                                                    
-                                                    <button type="button" onClick={() => deleteDevice(device.id)} className="btn btn-danger btn-sm">Delete</button>
-                                                    {console.log(id)}
-                                                    <Link to={`/device/${device.id}/edit?studentId=${id}`} className="btn btn-success">Edit</Link>
-
-                                                </li>
-                                            ))}
-                                        </ul>
+                                    <div className="card mt-5">
+                                        <div className="card-header">
+                                            <h4> Devices List </h4>
+                                        </div>
+                                        <div className="card-body">
+                                            <table className="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Device Name</th>
+                                                        <th>Description</th>
+                                                        <th>ID</th>
+                                                        <th>Edit</th>
+                                                        <th>Delete</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {student.devices && student.devices.map((device) => (
+                                                        <tr key = {device.id}>
+                                                            <td> {device.name} </td>
+                                                            <td> {device.description} </td>
+                                                            <td> {device.id} </td>
+                                                            <td>
+                                                                <Link to={`/device/${device.id}/edit?studentId=${id}`} className="btn btn-success">Edit</Link>
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" onClick={() => deleteDevice(device.id)} className="btn btn-danger">Delete</button>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                            </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
