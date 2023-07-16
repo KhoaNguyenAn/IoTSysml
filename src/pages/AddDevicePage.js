@@ -120,6 +120,8 @@ function AddDevicePage() {
 
 
   const deleteSensor = async (sensorId) => {
+    // console.log(studentId)
+    // console.log(id)
     const updatedStudents = students.map((student) => {
       if (student.id === studentId) {
         if (student.devices) {
@@ -137,7 +139,7 @@ function AddDevicePage() {
       return student;
     });
 
-    await updateDoc(applicationDoc, updatedStudents[studentIndex]);
+    await updateDoc(applicationDoc, updatedStudents[0]);
   };
 
   useEffect(() => {
