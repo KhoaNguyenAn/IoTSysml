@@ -47,7 +47,7 @@ function AddDevicePage() {
         console.error('Error retrieving applications:', error);
         setIsLoading(false);
       });
-  }, []);
+  }, [students, refresh]);
 
   const getDataFromId = () => {
     // console.log("hi")
@@ -140,6 +140,8 @@ function AddDevicePage() {
     });
 
     await updateDoc(applicationDoc, updatedStudents[0]);
+    setStudents([...students]);
+    setRefresh(!refresh)
   };
 
   useEffect(() => {
