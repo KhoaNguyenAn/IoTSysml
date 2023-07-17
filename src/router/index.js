@@ -7,6 +7,7 @@ import StudentCreate from '../pages/StudentCreate.js'
 import StudentEdit from '../pages/StudentEdit.js'
 import AddDevicePage from '../pages/AddDevicePage.js'
 import AddSensorPage from '../pages/AddSensorPage.js'
+import AddSituationPage from '../pages/AddSituationPage.js'
 
 function MyRouter() {
     return (
@@ -19,6 +20,7 @@ function MyRouter() {
             <Route path="/students/:id/edit" element={<StudentEdit/>} />
             <Route path="/device/:id/edit" element={<AddDevicePage/>} />
             <Route path="/sensor/:id/edit" element={<AddSensorPage/>} />
+            <Route path="/situation/:id/edit" element={<AddSituationPage/>} />
         </Routes>
     )
 }

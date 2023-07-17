@@ -17,6 +17,9 @@ function AddDevicePage() {
   const studentId = searchParams.get('studentId');
   const [isLoading, setIsLoading] = useState(true);
   const [device, setDevice] = useState({});
+
+
+
   const [studentIndex, setStudentIndex] = useState(null);
   const [students, setStudents] = useState([]);
   const applicationDoc = doc(db, 'applications', studentId);
@@ -26,13 +29,6 @@ function AddDevicePage() {
   // console.log(studentId);
 
   useEffect(() => {
-
-    for (let i = 0; i < students.length; i++) {
-      if (students[i].id === studentId) {
-        setStudentIndex(i)
-      }
-    }
-
 
 
     const getApplications = async () => {
@@ -118,6 +114,59 @@ function AddDevicePage() {
     setRefresh(!refresh)
   };
 
+  const addSituation = async (situationName, previousState, thresholdTime, certainty) => {
+    const newSituation = { id: uuidv4(), name: situationName, previousState: previousState, thresholdTime: thresholdTime, certainty:certainty };
+    const updatedStudents = students.map((student) => {
+      if (student.id === studentId) {
+        if (student.devices) {
+          const updatedDevices = student.devices.map((dev) => {
+            if (dev.id === id) {
+              if (!dev.situations) {
+                dev.situations = [newSituation];
+              } else {
+                dev.situations.push(newSituation);
+              }
+            }
+            setDevice(dev)
+            return dev;
+          });
+          return { ...student, devices: updatedDevices };
+        }
+      }
+      return student;
+    });
+
+    await updateDoc(applicationDoc, updatedStudents[0]);
+    // console.log(updatedStudents)
+    setStudents(updatedStudents[0])
+    setRefresh(!refresh)
+  };
+
+  const deleteSituation = async (situationId) => {
+    // console.log(studentId)
+    // console.log(id)
+    const updatedStudents = students.map((student) => {
+      if (student.id === studentId) {
+        if (student.devices) {
+          const updatedDevices = student.devices.map((dev) => {
+            if (dev.id === id) {
+              if (dev.situations) {
+                dev.situations = dev.situations.filter((situation) => situation.id !== situationId);
+              }
+            }
+            return dev;
+          });
+          return { ...student, devices: updatedDevices };
+        }
+      }
+      return student;
+    });
+
+    await updateDoc(applicationDoc, updatedStudents[0]);
+    setStudents([...students]);
+    setRefresh(!refresh)
+  };
+
 
   const deleteSensor = async (sensorId) => {
     // console.log(studentId)
@@ -147,6 +196,11 @@ function AddDevicePage() {
   useEffect(() => {
     if (!isLoading) {
       getDataFromId();
+      for (let i = 0; i < students.length; i++) {
+        if (students[i].id === studentId) {
+          setStudentIndex(i)
+        }
+      }
     }
   }, [isLoading]);
 
@@ -195,6 +249,9 @@ function AddDevicePage() {
                   sensors={device.sensors}
                   addSensor={addSensor}
                   deleteSensor={deleteSensor}
+                  situations={device.situations}
+                  addSituation={addSituation}
+                  deleteSituation={deleteSituation}
                 />
               </div>
             </div>
@@ -205,19 +262,37 @@ function AddDevicePage() {
   );
 }
 
-function DeviceSensors({ sensors, addSensor, deleteSensor }) {
+function DeviceSensors({ sensors, addSensor, deleteSensor, situations, addSituation, deleteSituation }) {
   const [show, setShow] = useState(false);
+  const [show1, setShow1] = useState(false);
   const [sensorName, setSensorName] = useState('');
   const [sensorValue, setSensorValue] = useState('');
 
+  const [situationName, setSituationName] = useState('');
+  const [previousState, setPreviousState] = useState('');
+  const [thresholdTime, setThresholdTime] = useState('');
+  const [certainty, setCertainty] = useState('');
+
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
+
+  const handleShow1 = () => setShow1(true);
+  const handleClose1 = () => setShow1(false);
 
   const handleSaveSensor = () => {
     addSensor(sensorName, sensorValue);
     setShow(false);
     setSensorName('');
     setSensorValue('');
+  };
+
+  const handleSaveSituation = () => {
+    addSituation(situationName,previousState, thresholdTime, certainty)
+    setShow1(false);
+    setSituationName('');
+    setPreviousState('');
+    setThresholdTime('');
+    setCertainty('');
   };
 
   return (
@@ -259,6 +334,100 @@ function DeviceSensors({ sensors, addSensor, deleteSensor }) {
           Add Sensor
         </button>
       </div>
+      <div className="card-header">
+        <h4> Situations List </h4>
+      </div>
+      <div className="card-body">
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Previous State</th>
+              <th>Threshold Time</th>
+              <th>Certainity</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* Replace 'situations' with the actual array of situations */}
+            {situations &&
+              situations.map((situation) => (
+                <tr key={situation.id}>
+                  <td>{situation.id}</td>
+                  <td>{situation.name}</td>
+                  <td>{situation.previousState}</td>
+                  <td>{situation.thresholdTime}</td>
+                  <td>{situation.certainty}</td>
+                  <td>
+                    <Link to={`/situation/${situation.id}/edit`} className="btn btn-success">
+                      Edit
+                    </Link>
+                  </td>
+                  <td>
+                    <button type="button" onClick={() => deleteSituation(situation.id)} className="btn btn-danger">
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+        <button type="button" onClick={handleShow1} className="btn btn-primary">
+          Add Situation
+        </button>
+      </div>
+      <Modal show={show1} onHide={handleClose1}>
+        <Modal.Header closeButton>
+          <Modal.Title> Add Situation </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* Modal body content */}
+          <div className="mb-3">
+            <label>Situation Name</label>
+            <input
+              type="text"
+              className="form-control"
+              value={situationName}
+              onChange={(e) => setSituationName(e.target.value)}
+            />
+          </div>
+          <div className="mb-3">
+            <label>Previous State</label>
+            <input
+              type="text"
+              className="form-control"
+              value={previousState}
+              onChange={(e) => setPreviousState(e.target.value)}
+            />
+          </div>
+          <div className="mb-3">
+            <label>Threshold Time</label>
+            <input
+              type="text"
+              className="form-control"
+              value={thresholdTime}
+              onChange={(e) => setThresholdTime(e.target.value)}
+            />
+          </div>
+          <div className="mb-3">
+            <label>Certainty</label>
+            <input
+              type="text"
+              className="form-control"
+              value={certainty}
+              onChange={(e) => setCertainty(e.target.value)}
+            />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose1}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleSaveSituation}>
+            Save Situation
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
@@ -293,6 +462,8 @@ function DeviceSensors({ sensors, addSensor, deleteSensor }) {
             </Button>
           </Modal.Footer>
         </Modal>
+
+        
       </div>
   );
 }
