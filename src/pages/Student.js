@@ -84,6 +84,9 @@ function Student() {
                                         </tbody>
                                     </table>
                                 </div>
+                                <div className="card-footer d-flex justify-content-center">
+                                    <button className="btn btn-warning float-end">Export All Data To JSON</button>
+                                </div>
                             </div>
                         </div>
                     </div>

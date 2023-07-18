@@ -13,6 +13,11 @@ function AddDevicePage() {
   const nameRef = useRef(null);
   const emailRef = useRef(null);
   const descriptionRef = useRef(null);
+  const typeRef = useRef(null);
+  const deploymentLocationRef = useRef(null);
+  const quantityKindRef = useRef(null);
+
+
   const searchParams = new URLSearchParams(location.search);
   const studentId = searchParams.get('studentId');
   const [isLoading, setIsLoading] = useState(true);
@@ -58,6 +63,9 @@ function AddDevicePage() {
               nameRef.current.value = students[i].devices[j].name;
               emailRef.current.value = students[i].devices[j].id;
               descriptionRef.current.value = students[i].devices[j].description;
+              typeRef.current.value = students[i].devices[j].type;
+              deploymentLocationRef.current.value = students[i].devices[j].deploymentLocation;
+              quantityKindRef.current.value = students[i].devices[j].quantityKind;
             }
           }
         }
@@ -73,7 +81,10 @@ function AddDevicePage() {
         if (student.devices) {
           const updatedDevices = student.devices.map((dev) => {
             if (dev.id === id) {
-              return { ...dev, name: nameRef.current.value, id: emailRef.current.value, description: descriptionRef.current.value };
+              return { ...dev, name: nameRef.current.value, id: emailRef.current.value, 
+                      description: descriptionRef.current.value, type: typeRef.current.value,
+                      deploymentLocation: deploymentLocationRef.current.value, quantityKind: quantityKindRef.current.value
+                      };
             }
             return dev;
           });
@@ -86,8 +97,11 @@ function AddDevicePage() {
     await updateDoc(applicationDoc, updatedStudents[studentIndex]);
   };
 
-  const addSensor = async (sensorName, value) => {
-    const newSensor = { id: uuidv4(), name: sensorName, value };
+  const addSensor = async (sensorName, value, type, deploymentLocation, quantityKind) => {
+    const newSensor = { id: uuidv4(), name: sensorName, value: value,
+                        type: type, deploymentLocation: deploymentLocation,
+                        quantityKind: quantityKind
+                       };
     const updatedStudents = students.map((student) => {
       if (student.id === studentId) {
         if (student.devices) {
@@ -233,6 +247,18 @@ function AddDevicePage() {
                     <input type="text" ref={descriptionRef} className="form-control" />
                   </div>
                   <div className="mb-3">
+                    <label>Type</label>
+                    <input type="text" ref={typeRef} className="form-control" />
+                  </div>
+                  <div className="mb-3">
+                    <label>Deployment Location</label>
+                    <input type="text" ref={deploymentLocationRef} className="form-control" />
+                  </div>
+                  <div className="mb-3">
+                    <label>Quantity Kind</label>
+                    <input type="text" ref={quantityKindRef} className="form-control" />
+                  </div>
+                  <div className="mb-3">
                     <label>ID</label>
                     <input type="text" ref={emailRef} className="form-control" />
                   </div>
@@ -267,6 +293,9 @@ function DeviceSensors({ sensors, addSensor, deleteSensor, situations, addSituat
   const [show1, setShow1] = useState(false);
   const [sensorName, setSensorName] = useState('');
   const [sensorValue, setSensorValue] = useState('');
+  const [type, setType] = useState('');
+  const [deploymentLocation, setdeploymentLocation] = useState('');
+  const [quantityKind, setquantityKind] = useState('');
 
   const [situationName, setSituationName] = useState('');
   const [previousState, setPreviousState] = useState('');
@@ -280,10 +309,13 @@ function DeviceSensors({ sensors, addSensor, deleteSensor, situations, addSituat
   const handleClose1 = () => setShow1(false);
 
   const handleSaveSensor = () => {
-    addSensor(sensorName, sensorValue);
+    addSensor(sensorName, sensorValue, type, deploymentLocation, quantityKind);
     setShow(false);
     setSensorName('');
     setSensorValue('');
+    setType('');
+    setdeploymentLocation('');
+    setquantityKind('');
   };
 
   const handleSaveSituation = () => {
@@ -307,6 +339,9 @@ function DeviceSensors({ sensors, addSensor, deleteSensor, situations, addSituat
               <th>ID</th>
               <th>Name</th>
               <th>Value</th>
+              <th>Type</th>
+              <th>Deployment Location</th>
+              <th>Quantity Kind</th>
               <th>Edit</th>
               <th>Delete</th>
             </tr>
@@ -318,6 +353,9 @@ function DeviceSensors({ sensors, addSensor, deleteSensor, situations, addSituat
                   <td> {sensor.id} </td>
                   <td> {sensor.name} </td>
                   <td> {sensor.value} </td>
+                  <td> {sensor.type} </td>
+                  <td> {sensor.deploymentLocation} </td>
+                  <td> {sensor.quantityKind} </td>
                   <td>
                       <Link to={`/sensor/${sensor.id}/edit`} className="btn btn-success">Edit</Link>
                   </td>
@@ -450,6 +488,33 @@ function DeviceSensors({ sensors, addSensor, deleteSensor, situations, addSituat
                 className="form-control"
                 value={sensorValue}
                 onChange={(e) => setSensorValue(e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <label>Sensor Type</label>
+              <input
+                type="text"
+                className="form-control"
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <label>Deployment Location</label>
+              <input
+                type="text"
+                className="form-control"
+                value={deploymentLocation}
+                onChange={(e) => setdeploymentLocation(e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <label>Quantity Kind</label>
+              <input
+                type="text"
+                className="form-control"
+                value={quantityKind}
+                onChange={(e) => setquantityKind(e.target.value)}
               />
             </div>
           </Modal.Body>

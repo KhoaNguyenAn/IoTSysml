@@ -52,10 +52,13 @@ function StudentEdit() {
         }
     }
 
-    const addDevice = async (deviceName, description) => {
+    const addDevice = async (deviceName, description, type, deploymentLocation, quantityKind) => {
         var device = {
             name: deviceName,
             description: description,
+            type: type,
+            deploymentLocation: deploymentLocation,
+            quantityKind: quantityKind,
             id: uuidv4(),
         }
 
@@ -157,6 +160,9 @@ function StudentEdit() {
                                                         <th>Device Name</th>
                                                         <th>Description</th>
                                                         <th>ID</th>
+                                                        <th>Type</th>
+                                                        <th>Deployment Location</th>
+                                                        <th>Quantity Kind</th>
                                                         <th>Edit</th>
                                                         <th>Delete</th>
                                                     </tr>
@@ -167,6 +173,9 @@ function StudentEdit() {
                                                             <td> {device.name} </td>
                                                             <td> {device.description} </td>
                                                             <td> {device.id} </td>
+                                                            <td> {device.type} </td>
+                                                            <td> {device.deploymentLocation} </td>
+                                                            <td> {device.quantityKind} </td>
                                                             <td>
                                                                 <Link to={`/device/${device.id}/edit?studentId=${id}`} className="btn btn-success">Edit</Link>
                                                             </td>

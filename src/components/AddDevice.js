@@ -5,15 +5,21 @@ function DevicePopup({ addDevice }) {
     const [show, setShow] = useState(false);
     const [deviceName, setDeviceName] = useState('');
     const [description, setDescription] = useState('');
+    const [type, setType] = useState('');
+    const [deploymentLoc, setDeploymentLocation] = useState('');
+    const [quantityKind, setQuantityKind] = useState('');
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
     const handleSave = () => {
-        addDevice(deviceName, description);
+        addDevice(deviceName, description, type, deploymentLoc, quantityKind);
         setShow(false);
         setDeviceName('');
         setDescription('');
+        setType('');
+        setDeploymentLocation('');
+        setQuantityKind('');
     };
 
     return (
@@ -42,6 +48,30 @@ function DevicePopup({ addDevice }) {
                             className="form-control"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
+                        ></textarea>
+                    </div>
+                    <div className="mb-3">
+                        <label>Type</label>
+                        <textarea
+                            className="form-control"
+                            value={type}
+                            onChange={(e) => setType(e.target.value)}
+                        ></textarea>
+                    </div>
+                    <div className="mb-3">
+                        <label>Deployment Location</label>
+                        <textarea
+                            className="form-control"
+                            value={deploymentLoc}
+                            onChange={(e) => setDeploymentLocation(e.target.value)}
+                        ></textarea>
+                    </div>
+                    <div className="mb-3">
+                        <label>Quantity Kind</label>
+                        <textarea
+                            className="form-control"
+                            value={quantityKind}
+                            onChange={(e) => setQuantityKind(e.target.value)}
                         ></textarea>
                     </div>
                 </Modal.Body>
