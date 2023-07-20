@@ -99,7 +99,7 @@ function ViewMatrix() {
   );
 }
 
-// export default ViewMatrix; 
+export default ViewMatrix; 
 
 // import React, { useState } from 'react';
 // import TextField from '@mui/material/TextField';
