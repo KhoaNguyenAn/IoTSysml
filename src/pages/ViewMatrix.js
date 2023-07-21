@@ -48,11 +48,22 @@ function ViewMatrix() {
   const location = useLocation();
   var situationsList = location.state.situations;
   situationsList = situationsList.map((situation) => {
+    const valuesLength = situationsList.length;
+    const filledValues = situation.values ?? new Array(valuesLength).fill(0);
+  
+    if (filledValues.length < valuesLength) {
+      const diff = valuesLength - filledValues.length;
+      for (let i = 0; i < diff; i++) {
+        filledValues.push(0);
+      }
+    }
+  
     return {
       ...situation,
-      values: situation.values ?? new Array(situationsList.length).fill(0)
+      values: filledValues,
     };
   });
+  
 
   // console.log(situations)
   const [situations, setSituations] = useState(situationsList)
