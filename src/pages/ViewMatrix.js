@@ -18,6 +18,9 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
+import { db } from '../Firebase.js';
+import { collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -43,7 +46,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 function ViewMatrix() {
   const location = useLocation();
-  var situationsList = location.state;
+  var situationsList = location.state.situations;
   situationsList = situationsList.map((situation) => {
     return {
       ...situation,
@@ -51,8 +54,73 @@ function ViewMatrix() {
     };
   });
 
-  const [situations, setSituations] = useState(situationsList)
   // console.log(situations)
+  const [situations, setSituations] = useState(situationsList)
+
+  console.log(location.state.situations)
+  // console.log(location.state.applicationID)
+  // console.log(location.state.deviceID)
+
+
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [device, setDevice] = useState({});
+  const applicationCollectionRef = collection(db, 'applications');
+  const applicationDoc = doc(db, 'applications', location.state.applicationID);
+
+
+  const [studentIndex, setStudentIndex] = useState(null);
+  const [students, setStudents] = useState([]);
+  const [refresh, setRefresh] = useState(false)
+
+
+  useEffect(() => {
+
+
+    const getApplications = async () => {
+      const data = await getDocs(applicationCollectionRef);
+      const studentData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      setStudents(studentData);
+      setIsLoading(false);
+    };
+    getApplications()
+      .then(() => setIsLoading(false))
+      .catch((error) => {
+        console.error('Error retrieving applications:', error);
+        setIsLoading(false);
+      });
+  }, [students, refresh]);
+
+  const getDataFromId = () => {
+    for (let i = 0; i < students.length; i++) {
+      if (students[i].id === location.state.applicationID) {
+        if (students[i].devices) {
+          for (let j = 0; j < students[i].devices.length; j++) {
+            if (students[i].devices[j].id === location.state.deviceID) {
+              // console.log(students[i].devices[j])
+              setDevice(students[i].devices[j]);
+            }
+          }
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!isLoading) {
+      getDataFromId();
+      for (let i = 0; i < students.length; i++) {
+        if (students[i].id === location.state.applicationID) {
+          setStudentIndex(i)
+        }
+      }
+    }
+  }, [isLoading]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   
   const handleSituationChange = (index, index2) => (event) => {
     const { value } = event.target;
@@ -65,13 +133,26 @@ function ViewMatrix() {
     );
   };
 
-  const handleSubmit = () => {
-    // event.preventDefault();
-    // Use the 'situations' array to access data from each text field
-    // situations.forEach((situation, index) => {
-    //   console.log(`${situation.label}: ${situation.values.join(', ')}`);
-    // });
-    console.log(situations)
+  const handleSubmit = async() => {
+      const updatedStudents = students.map((student) => {
+        if (student.id === location.state.applicationID) {
+          if (student.devices) {
+            const updatedDevices = student.devices.map((dev) => {
+              if (dev.id === location.state.deviceID) {
+                dev.situations = situations
+              }
+              setDevice(dev)
+              return dev;
+            });
+            return { ...student, devices: updatedDevices };
+          }
+        }
+        return student;
+      });
+      await updateDoc(applicationDoc, updatedStudents[0]);
+      // console.log(updatedStudents)
+      setStudents(updatedStudents[0])
+      setRefresh(!refresh)
   };
 
   return (

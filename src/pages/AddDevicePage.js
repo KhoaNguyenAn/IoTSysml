@@ -279,6 +279,8 @@ function AddDevicePage() {
                   situations={device.situations}
                   addSituation={addSituation}
                   deleteSituation={deleteSituation}
+                  applicationID = {studentId}
+                  deviceID = {id}
                 />
               </div>
             </div>

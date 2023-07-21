@@ -7,11 +7,11 @@ import { Button, Modal } from 'react-bootstrap';
 import { BrowserRouter as Router, Switch, Route, Routes } from 'react-router-dom';
 import ViewMatrix from './ViewMatrix.js';
 
-function DeviceSensors({ sensors, addSensor, deleteSensor, situations, addSituation, deleteSituation }) {
+function DeviceSensors({ sensors, addSensor, deleteSensor, situations, addSituation, deleteSituation, applicationID, deviceID }) {
     const navigate = useNavigate();
 
     const handleViewMatrix = () => {
-        navigate('/situation/matrix',{state: situations})
+        navigate('/situation/matrix',{state: {situations, applicationID, deviceID}})
       };
 
     const [show, setShow] = useState(false);
