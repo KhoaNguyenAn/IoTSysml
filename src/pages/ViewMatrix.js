@@ -43,8 +43,36 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 function ViewMatrix() {
   const location = useLocation();
-  const situations = location.state;
-  console.log(situations)
+  var situationsList = location.state;
+  situationsList = situationsList.map((situation) => {
+    return {
+      ...situation,
+      values: situation.values ?? new Array(situationsList.length).fill(0)
+    };
+  });
+
+  const [situations, setSituations] = useState(situationsList)
+  // console.log(situations)
+  
+  const handleSituationChange = (index, index2) => (event) => {
+    const { value } = event.target;
+    setSituations((prevSituations) =>
+      prevSituations.map((situation, i) =>
+        i === index
+          ? { ...situation, values: situation.values.map((val, j) => (j === index2 ? value : val)) }
+          : situation
+      )
+    );
+  };
+
+  const handleSubmit = () => {
+    // event.preventDefault();
+    // Use the 'situations' array to access data from each text field
+    // situations.forEach((situation, index) => {
+    //   console.log(`${situation.label}: ${situation.values.join(', ')}`);
+    // });
+    console.log(situations)
+  };
 
   return (
     <TableContainer component={Paper}>
@@ -74,15 +102,19 @@ function ViewMatrix() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {situations.map((situation) => (
+          {situations.map((situation, index) => (
             <StyledTableRow key={situation.name}>
               <StyledTableCell component="th" scope="row">
                 {situation.name}
               </StyledTableCell>
               {
-                situations.map(() => (
+                
+                situations.map((situation2, index2) => (
                   <StyledTableCell align="center">
-                    <TextField id={situation.name} label="value" variant="filled" />
+                    <TextField label="value" variant="filled" key={`${index}-${index2}`} 
+                               value={situation.values[index2] !== undefined ? situation.values[index2] : ''}
+                               onChange={handleSituationChange(index, index2)}
+                    />
                   </StyledTableCell>
                 ))
               }
@@ -91,7 +123,7 @@ function ViewMatrix() {
         </TableBody>
       </Table>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '5vh' }}>
-          <Button variant="contained">
+          <Button variant="contained" onClick={handleSubmit}>
               Update Situation Value Data
           </Button>
       </div>
@@ -101,53 +133,4 @@ function ViewMatrix() {
 
 export default ViewMatrix; 
 
-// import React, { useState } from 'react';
-// import TextField from '@mui/material/TextField';
-// import Button from '@mui/material/Button';
-
-// function MyForm() {
-//   const initialFields = [
-//     { label: 'Field 1', value: '' },
-//     { label: 'Field 2', value: '' },
-//     { label: 'Field 3', value: '' },
-//     // Add more fields as needed
-//   ];
-
-//   const [fields, setFields] = useState(initialFields);
-
-//   const handleFieldChange = (index) => (event) => {
-//     const { value } = event.target;
-//     setFields((prevFields) =>
-//       prevFields.map((field, i) => (i === index ? { ...field, value } : field))
-//     );
-//   };
-
-//   const handleSubmit = (event) => {
-//     event.preventDefault();
-//     // Use the 'fields' array to access data from each text field
-//     fields.forEach((field, index) => {
-//       console.log(`${field.label}: ${field.value}`);
-//     });
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       {fields.map((field, index) => (
-//         <TextField
-//           key={index}
-//           label={field.label}
-//           value={field.value}
-//           onChange={handleFieldChange(index)}
-//           fullWidth
-//           margin="normal"
-//         />
-//       ))}
-//       <Button type="submit" variant="contained" color="primary">
-//         Submit
-//       </Button>
-//     </form>
-//   );
-// }
-
-// export default MyForm;
 
