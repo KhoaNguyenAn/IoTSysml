@@ -17,6 +17,8 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useNavigate } from 'react-router-dom';
+
 
 import { db } from '../Firebase.js';
 import { collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
@@ -45,6 +47,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 function ViewMatrix() {
+  const navigate = useNavigate();
+
   const location = useLocation();
   var situationsList = location.state.situations;
   situationsList = situationsList.map((situation) => {
@@ -164,6 +168,7 @@ function ViewMatrix() {
       // console.log(updatedStudents)
       setStudents(updatedStudents[0])
       setRefresh(!refresh)
+      navigate(`/device/${location.state.deviceID}/edit?studentId=${location.state.applicationID}`);
   };
 
   return (

@@ -14,6 +14,14 @@ function DeviceSensors({ sensors, addSensor, deleteSensor, situations, addSituat
         navigate('/situation/matrix',{state: {situations, applicationID, deviceID}})
       };
 
+    const handleEditSensor = (sensorID) => {
+        navigate('/sensor/edit', {state: {sensorID, applicationID, deviceID}})
+    };
+
+    const handleEditSituation = (situationID) => {
+      navigate('/situation/edit', {state: {situationID, applicationID, deviceID}})
+    };
+
     const [show, setShow] = useState(false);
     const [show1, setShow1] = useState(false);
     const [sensorName, setSensorName] = useState('');
@@ -82,7 +90,9 @@ function DeviceSensors({ sensors, addSensor, deleteSensor, situations, addSituat
                     <td> {sensor.deploymentLocation} </td>
                     <td> {sensor.quantityKind} </td>
                     <td>
-                        <Link to={`/sensor/${sensor.id}/edit`} className="btn btn-success">Edit</Link>
+                        <button type="button" onClick={() => handleEditSensor(sensor.id)} className="btn btn-success">
+                          Edit
+                        </button>
                     </td>
                     <td>
                         <button type="button" onClick={() => deleteSensor(sensor.id)} className="btn btn-danger">
@@ -122,9 +132,9 @@ function DeviceSensors({ sensors, addSensor, deleteSensor, situations, addSituat
                     <td>{situation.thresholdTime}</td>
                     <td>{situation.certainty}</td>
                     <td>
-                      <Link to={`/situation/${situation.id}/edit`} className="btn btn-success">
+                      <button type="button" onClick={() => handleEditSituation(situation.id)} className="btn btn-success">
                         Edit
-                      </Link>
+                      </button>
                     </td>
                     <td>
                       <button type="button" onClick={() => deleteSituation(situation.id)} className="btn btn-danger">

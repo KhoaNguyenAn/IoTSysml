@@ -5,7 +5,7 @@ import { collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firesto
 import { v4 as uuidv4 } from 'uuid';
 import { Button, Modal } from 'react-bootstrap';
 
-function AddSituationPage() {
+function EditSituationPage() {
     return (
         <div>
             <h1> Add Situation Page </h1>
@@ -14,4 +14,4 @@ function AddSituationPage() {
 }
 
 
-export default AddSituationPage;
+export default EditSituationPage;
