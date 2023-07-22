@@ -232,15 +232,6 @@ function DeviceSensors({ sensors, addSensor, deleteSensor, situations, addSituat
             />
           </div>
           <div className="mb-3">
-            <label>Sensor Value</label>
-            <input
-              type="text"
-              className="form-control"
-              value={sensorValue}
-              onChange={(e) => setSensorValue(e.target.value)}
-            />
-          </div>
-          <div className="mb-3">
             <label>Sensor Type</label>
             <Select
               options={typeOptions}
@@ -259,6 +250,15 @@ function DeviceSensors({ sensors, addSensor, deleteSensor, situations, addSituat
             ></textarea>
           </div>
           <div className="mb-3">
+            <label>Sensor Value</label>
+            <input
+              type="text"
+              className="form-control"
+              value={sensorValue}
+              onChange={(e) => setSensorValue(e.target.value)}
+            />
+          </div>
+          <div className="mb-3">
             <label>Deployment Location</label>
             <input
               type="text"
@@ -269,12 +269,6 @@ function DeviceSensors({ sensors, addSensor, deleteSensor, situations, addSituat
           </div>
           <div className="mb-3">
             <label>Quantity Kind</label>
-            {/* <input
-              type="text"
-              className="form-control"
-              value={quantityKind}
-              onChange={(e) => setquantityKind(e.target.value)}
-            /> */}
             <input
               type="number"
               className="form-control"

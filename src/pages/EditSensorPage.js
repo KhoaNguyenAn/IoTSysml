@@ -163,14 +163,6 @@ function EditSensorPage() {
                     <input type="text" ref={idRef} className="form-control" readOnly/>
                   </div>
                   <div className="mb-3">
-                    <label>Name</label>
-                    <input type="text" ref={nameRef} className="form-control" />
-                  </div>
-                  <div className="mb-3">
-                    <label>Value</label>
-                    <input type="text" ref={valueRef} className="form-control" />
-                  </div>
-                  <div className="mb-3">
                     <label>Type</label>
                     <Select
                       options={typeOptions}
@@ -183,6 +175,14 @@ function EditSensorPage() {
                       placeholder="Select Type from our own list..."
                     />
                     <input type="text" ref={typeRef} className="form-control mt-2" />
+                  </div>
+                  <div className="mb-3">
+                    <label>Name</label>
+                    <input type="text" ref={nameRef} className="form-control" />
+                  </div>
+                  <div className="mb-3">
+                    <label>Value</label>
+                    <input type="text" ref={valueRef} className="form-control" />
                   </div>
                   <div className="mb-3">
                     <label>Deployment Location</label>
