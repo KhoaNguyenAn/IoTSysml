@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import Select from 'react-select';
-
+import PlacesAutocomplete, {
+    geocodeByAddress,
+    getLatLng,
+} from 'react-places-autocomplete';
 // Sample list of options
 const typeOptions = [
     { value: 'Option 1', label: 'Option 1' },
@@ -31,6 +34,22 @@ function DevicePopup({ addDevice }) {
         setDeploymentLocation('');
         setQuantityKind('');
     };
+
+    const handleAddressChange = useCallback((address) => {
+        setDeploymentLocation(address);
+    }, []);
+
+    const handleSelectAddress = useCallback((address) => {
+        setDeploymentLocation(address);
+        geocodeByAddress(address)
+            .then((results) => getLatLng(results[0]))
+            .then((latLng) => {
+                // Do something with latLng (optional)
+                console.log('Latlng:', latLng);
+            })
+            .catch((error) => console.error('Error', error));
+    }, []);
+
 
     return (
         <>
@@ -80,11 +99,44 @@ function DevicePopup({ addDevice }) {
                     </div>
                     <div className="mb-3">
                         <label>Deployment Location</label>
-                        <textarea
-                            className="form-control"
+                        <PlacesAutocomplete
                             value={deploymentLoc}
-                            onChange={(e) => setDeploymentLocation(e.target.value)}
-                        ></textarea>
+                            onChange={handleAddressChange}
+                            onSelect={handleSelectAddress}
+                        >
+                            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                                <>
+                                    <input
+                                        {...getInputProps({
+                                            placeholder: 'Enter address...',
+                                            className: 'form-control',
+                                        })}
+                                    />
+                                    <div className="autocomplete-dropdown-container">
+                                        {loading && <div>Loading...</div>}
+                                        {suggestions.map(suggestion => {
+                                            const className = suggestion.active
+                                                ? 'suggestion-item--active'
+                                                : 'suggestion-item';
+                                            // inline style for demonstration purpose
+                                            const style = suggestion.active
+                                                ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                                : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                            return (
+                                                <div
+                                                    {...getSuggestionItemProps(suggestion, {
+                                                        className,
+                                                        style,
+                                                    })}
+                                                >
+                                                    <span>{suggestion.description}</span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </>
+                            )}
+                        </PlacesAutocomplete>
                     </div>
                     <div className="mb-3">
                         <label>Quantity Kind</label>
