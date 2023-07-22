@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
+import Select from 'react-select';
+
+// Sample list of options
+const typeOptions = [
+    { value: 'Option 1', label: 'Option 1' },
+    { value: 'Option 2', label: 'Option 2' },
+    { value: 'Option 3', label: 'Option 3' },
+    { value: 'Option 4', label: 'Option 4' },
+    // Add more options as needed
+  ];
 
 function DevicePopup({ addDevice }) {
     const [show, setShow] = useState(false);
@@ -52,10 +62,20 @@ function DevicePopup({ addDevice }) {
                     </div>
                     <div className="mb-3">
                         <label>Type</label>
+                        <Select
+                            options={typeOptions}
+                            onChange={(selectedOption) => {
+                                setType(selectedOption.value)
+                            }}
+                            isClearable
+                            isSearchable
+                            placeholder="Select Type from our own list..."
+                        />
                         <textarea
-                            className="form-control"
+                            className="form-control mt-2"
                             value={type}
                             onChange={(e) => setType(e.target.value)}
+                            placeholder="Enter your own Type"
                         ></textarea>
                     </div>
                     <div className="mb-3">
