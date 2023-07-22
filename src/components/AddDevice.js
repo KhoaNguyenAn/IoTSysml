@@ -120,7 +120,7 @@ function DevicePopup({ addDevice }) {
                                                 : 'suggestion-item';
                                             // inline style for demonstration purpose
                                             const style = suggestion.active
-                                                ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                                ? { backgroundColor: '#ade0ff', cursor: 'pointer' }
                                                 : { backgroundColor: '#ffffff', cursor: 'pointer' };
                                             return (
                                                 <div
