@@ -9,7 +9,7 @@ const typeOptions = [
     { value: 'Option 3', label: 'Option 3' },
     { value: 'Option 4', label: 'Option 4' },
     // Add more options as needed
-  ];
+];
 
 function DevicePopup({ addDevice }) {
     const [show, setShow] = useState(false);
@@ -88,11 +88,13 @@ function DevicePopup({ addDevice }) {
                     </div>
                     <div className="mb-3">
                         <label>Quantity Kind</label>
-                        <textarea
+                        <input
+                            type="number"
                             className="form-control"
                             value={quantityKind}
-                            onChange={(e) => setQuantityKind(e.target.value)}
-                        ></textarea>
+                            onChange={(e) => setQuantityKind(Math.max(1, e.target.value))}
+                            min={1}
+                        />
                     </div>
                 </Modal.Body>
                 <Modal.Footer>

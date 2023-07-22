@@ -10,13 +10,13 @@ import Select from 'react-select';
 
 // Sample list of options
 const typeOptions = [
-    { value: 'Option 1', label: 'Option 1' },
-    { value: 'Option 2', label: 'Option 2' },
-    { value: 'Option 3', label: 'Option 3' },
-    { value: 'Option 4', label: 'Option 4' },
-    // Add more options as needed
-  ];
-  
+  { value: 'Option 1', label: 'Option 1' },
+  { value: 'Option 2', label: 'Option 2' },
+  { value: 'Option 3', label: 'Option 3' },
+  { value: 'Option 4', label: 'Option 4' },
+  // Add more options as needed
+];
+
 function DeviceSensors({ sensors, addSensor, deleteSensor, situations, addSituation, deleteSituation, applicationID, deviceID }) {
   const navigate = useNavigate();
 
@@ -269,11 +269,18 @@ function DeviceSensors({ sensors, addSensor, deleteSensor, situations, addSituat
           </div>
           <div className="mb-3">
             <label>Quantity Kind</label>
-            <input
+            {/* <input
               type="text"
               className="form-control"
               value={quantityKind}
               onChange={(e) => setquantityKind(e.target.value)}
+            /> */}
+            <input
+              type="number"
+              className="form-control"
+              value={quantityKind}
+              onChange={(e) => setquantityKind(Math.max(1, e.target.value))}
+              min={1}
             />
           </div>
         </Modal.Body>

@@ -186,7 +186,12 @@ function EditSensorPage() {
                   </div>
                   <div className="mb-3">
                     <label>Quantity Kind</label>
-                    <input type="text" ref={quantityKindRef} className="form-control" />
+                    <input
+                      type="number"
+                      className="form-control"
+                      ref={quantityKindRef}
+                      min={1}
+                    />
                   </div>
                   <div className="mb-3">
                     <label>ID</label>

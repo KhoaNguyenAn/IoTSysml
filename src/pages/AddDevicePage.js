@@ -94,10 +94,11 @@ function AddDevicePage() {
         if (student.devices) {
           const updatedDevices = student.devices.map((dev) => {
             if (dev.id === id) {
-              return { ...dev, name: nameRef.current.value, id: emailRef.current.value, 
-                      description: descriptionRef.current.value, type: typeRef.current.value,
-                      deploymentLocation: deploymentLocationRef.current.value, quantityKind: quantityKindRef.current.value
-                      };
+              return {
+                ...dev, name: nameRef.current.value, id: emailRef.current.value,
+                description: descriptionRef.current.value, type: typeRef.current.value,
+                deploymentLocation: deploymentLocationRef.current.value, quantityKind: quantityKindRef.current.value
+              };
             }
             return dev;
           });
@@ -111,10 +112,11 @@ function AddDevicePage() {
   };
 
   const addSensor = async (sensorName, value, type, deploymentLocation, quantityKind) => {
-    const newSensor = { id: uuidv4(), name: sensorName, value: value,
-                        type: type, deploymentLocation: deploymentLocation,
-                        quantityKind: quantityKind
-                       };
+    const newSensor = {
+      id: uuidv4(), name: sensorName, value: value,
+      type: type, deploymentLocation: deploymentLocation,
+      quantityKind: quantityKind
+    };
     const updatedStudents = students.map((student) => {
       if (student.id === studentId) {
         if (student.devices) {
@@ -143,7 +145,7 @@ function AddDevicePage() {
   };
 
   const addSituation = async (situationName, previousState, thresholdTime, certainity) => {
-    const newSituation = { id: uuidv4(), name: situationName, previousState: previousState, thresholdTime: thresholdTime, certainity:certainity };
+    const newSituation = { id: uuidv4(), name: situationName, previousState: previousState, thresholdTime: thresholdTime, certainity: certainity };
     const updatedStudents = students.map((student) => {
       if (student.id === studentId) {
         if (student.devices) {
@@ -264,17 +266,17 @@ function AddDevicePage() {
                   </div>
                   <div className="mb-3">
                     <label>Type</label>
-                      <Select
-                        options={typeOptions}
-                        ref={typeRef}
-                        onChange={(selectedOption) => {
-                          typeRef.current.value = selectedOption.value
-                        }}
-                        isClearable
-                        isSearchable
-                        placeholder="Select Type from our own list..."
-                      />
-                      <input type="text" ref={typeRef} className="form-control mt-2" />
+                    <Select
+                      options={typeOptions}
+                      ref={typeRef}
+                      onChange={(selectedOption) => {
+                        typeRef.current.value = selectedOption.value
+                      }}
+                      isClearable
+                      isSearchable
+                      placeholder="Select Type from our own list..."
+                    />
+                    <input type="text" ref={typeRef} className="form-control mt-2" />
                   </div>
                   <div className="mb-3">
                     <label>Deployment Location</label>
@@ -282,7 +284,13 @@ function AddDevicePage() {
                   </div>
                   <div className="mb-3">
                     <label>Quantity Kind</label>
-                    <input type="text" ref={quantityKindRef} className="form-control" />
+                    {/* <input type="text" ref={quantityKindRef} className="form-control" /> */}
+                    <input
+                      type="number"
+                      className="form-control"
+                      ref={quantityKindRef}
+                      min={1}
+                    />
                   </div>
                   <div className="mb-3">
                     <label>ID</label>
@@ -304,8 +312,8 @@ function AddDevicePage() {
                   situations={device.situations}
                   addSituation={addSituation}
                   deleteSituation={deleteSituation}
-                  applicationID = {studentId}
-                  deviceID = {id}
+                  applicationID={studentId}
+                  deviceID={id}
                 />
               </div>
             </div>
