@@ -257,6 +257,10 @@ function AddDevicePage() {
               <div className="card-body">
                 <form onSubmit={saveDevice}>
                   <div className="mb-3">
+                    <label>ID</label>
+                    <input type="text" ref={emailRef} className="form-control" readOnly />
+                  </div>
+                  <div className="mb-3">
                     <label>Name</label>
                     <input type="text" ref={nameRef} className="form-control" />
                   </div>
@@ -292,11 +296,6 @@ function AddDevicePage() {
                       min={1}
                     />
                   </div>
-                  <div className="mb-3">
-                    <label>ID</label>
-                    <input type="text" ref={emailRef} className="form-control" />
-                  </div>
-
                   <div className="mb-3">
                     <button type="submit" className="btn btn-primary">
                       Save Device
