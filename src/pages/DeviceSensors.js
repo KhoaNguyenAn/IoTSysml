@@ -33,7 +33,7 @@ function DeviceSensors({ sensors, addSensor, deleteSensor, situations, addSituat
     const [situationName, setSituationName] = useState('');
     const [previousState, setPreviousState] = useState('');
     const [thresholdTime, setThresholdTime] = useState('');
-    const [certainty, setCertainty] = useState('');
+    const [certainity, setcertainity] = useState('');
   
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
@@ -52,12 +52,12 @@ function DeviceSensors({ sensors, addSensor, deleteSensor, situations, addSituat
     };
   
     const handleSaveSituation = () => {
-      addSituation(situationName,previousState, thresholdTime, certainty)
+      addSituation(situationName,previousState, thresholdTime, certainity)
       setShow1(false);
       setSituationName('');
       setPreviousState('');
       setThresholdTime('');
-      setCertainty('');
+      setcertainity('');
     };
   
     return (
@@ -130,7 +130,7 @@ function DeviceSensors({ sensors, addSensor, deleteSensor, situations, addSituat
                     <td>{situation.name}</td>
                     <td>{situation.previousState}</td>
                     <td>{situation.thresholdTime}</td>
-                    <td>{situation.certainty}</td>
+                    <td>{situation.certainity}</td>
                     <td>
                       <button type="button" onClick={() => handleEditSituation(situation.id)} className="btn btn-success">
                         Edit
@@ -188,12 +188,12 @@ function DeviceSensors({ sensors, addSensor, deleteSensor, situations, addSituat
               />
             </div>
             <div className="mb-3">
-              <label>Certainty</label>
+              <label>certainity</label>
               <input
                 type="text"
                 className="form-control"
-                value={certainty}
-                onChange={(e) => setCertainty(e.target.value)}
+                value={certainity}
+                onChange={(e) => setcertainity(e.target.value)}
               />
             </div>
           </Modal.Body>

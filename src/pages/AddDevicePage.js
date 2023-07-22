@@ -129,8 +129,8 @@ function AddDevicePage() {
     setRefresh(!refresh)
   };
 
-  const addSituation = async (situationName, previousState, thresholdTime, certainty) => {
-    const newSituation = { id: uuidv4(), name: situationName, previousState: previousState, thresholdTime: thresholdTime, certainty:certainty };
+  const addSituation = async (situationName, previousState, thresholdTime, certainity) => {
+    const newSituation = { id: uuidv4(), name: situationName, previousState: previousState, thresholdTime: thresholdTime, certainity:certainity };
     const updatedStudents = students.map((student) => {
       if (student.id === studentId) {
         if (student.devices) {
