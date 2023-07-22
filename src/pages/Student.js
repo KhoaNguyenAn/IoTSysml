@@ -33,7 +33,7 @@ function Student() {
         await deleteDoc(applicationDoc);
 
         // thisClicked.closest("tr").remove();
-
+        window.location.reload();
     }
 
     var studentDetails = "";

@@ -139,6 +139,7 @@ function AddDevicePage() {
     // console.log(updatedStudents)
     setStudents(updatedStudents[0])
     setRefresh(!refresh)
+    window.location.reload();
   };
 
   const addSituation = async (situationName, previousState, thresholdTime, certainity) => {
@@ -192,6 +193,7 @@ function AddDevicePage() {
     await updateDoc(applicationDoc, updatedStudents[0]);
     setStudents([...students]);
     setRefresh(!refresh)
+    window.location.reload();
   };
 
 
@@ -218,6 +220,7 @@ function AddDevicePage() {
     await updateDoc(applicationDoc, updatedStudents[0]);
     setStudents([...students]);
     setRefresh(!refresh)
+    window.location.reload();
   };
 
   useEffect(() => {
