@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import { db } from '../Firebase.js';
 import { collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
@@ -6,6 +6,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { Button, Modal } from 'react-bootstrap';
 import DeviceSensors from './DeviceSensors.js';
 import Select from 'react-select';
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-places-autocomplete';
 
 
 // Sample list of options
@@ -43,6 +47,25 @@ function AddDevicePage() {
   const applicationDoc = doc(db, 'applications', studentId);
   const [refresh, setRefresh] = useState(false)
 
+  const [deploymentLocationValue, setDeploymentLocationValue] = useState('');
+
+  const handleAddressChange = useCallback((address) => {
+    deploymentLocationRef.current.value = address
+    setDeploymentLocationValue(address);
+  }, []);
+
+  const handleSelectAddress = useCallback((address) => {
+    deploymentLocationRef.current.value = address
+    setDeploymentLocationValue(address);
+    geocodeByAddress(address)
+      .then((results) => getLatLng(results[0]))
+      .then((latLng) => {
+        // Do something with latLng (optional)
+        console.log('Latlng:', latLng);
+      })
+      .catch((error) => console.error('Error', error));
+  }, []);
+
 
   // console.log(studentId);
 
@@ -78,6 +101,7 @@ function AddDevicePage() {
               descriptionRef.current.value = students[i].devices[j].description;
               typeRef.current.value = students[i].devices[j].type;
               deploymentLocationRef.current.value = students[i].devices[j].deploymentLocation;
+              setDeploymentLocationValue(deploymentLocationRef.current.value)
               quantityKindRef.current.value = students[i].devices[j].quantityKind;
             }
           }
@@ -284,7 +308,46 @@ function AddDevicePage() {
                   </div>
                   <div className="mb-3">
                     <label>Deployment Location</label>
-                    <input type="text" ref={deploymentLocationRef} className="form-control" />
+                    {/* <input type="text" ref={deploymentLocationRef} className="form-control" /> */}
+                    <PlacesAutocomplete
+                      value={deploymentLocationValue}
+                      onChange={handleAddressChange}
+                      onSelect={handleSelectAddress}
+                    >
+                      {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                        <>
+                          <input
+                            {...getInputProps({
+                              placeholder: 'Enter address...',
+                              className: 'form-control',
+                              ref: deploymentLocationRef,
+                            })}
+                          />
+                          <div className="autocomplete-dropdown-container">
+                            {loading && <div>Loading...</div>}
+                            {suggestions.map((suggestion) => {
+                              const className = suggestion.active
+                                ? 'suggestion-item--active'
+                                : 'suggestion-item';
+                              // inline style for demonstration purpose
+                              const style = suggestion.active
+                                ? { backgroundColor: '#ade0ff', cursor: 'pointer' }
+                                : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                              return (
+                                <div
+                                  {...getSuggestionItemProps(suggestion, {
+                                    className,
+                                    style,
+                                  })}
+                                >
+                                  <span>{suggestion.description}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </>
+                      )}
+                    </PlacesAutocomplete>
                   </div>
                   <div className="mb-3">
                     <label>Quantity Kind</label>
