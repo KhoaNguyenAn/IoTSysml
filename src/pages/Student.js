@@ -23,6 +23,19 @@ function Student() {
 
     },[])
 
+    const exportDataToJSON = () => {
+        const jsonData = JSON.stringify(students, null, 2);
+    
+        const blob = new Blob([jsonData], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'applications-data.json';
+        a.click();
+    
+        URL.revokeObjectURL(url);
+      };
+
     const deleteStudent = async(e, id) => {
         e.preventDefault();
         const thisClicked = e.currentTarget;
@@ -85,7 +98,7 @@ function Student() {
                                     </table>
                                 </div>
                                 <div className="card-footer d-flex justify-content-center">
-                                    <button className="btn btn-warning float-end">Export All Data To JSON</button>
+                                    <button className="btn btn-warning float-end" onClick={exportDataToJSON}>Export All Data To JSON</button>
                                 </div>
                             </div>
                         </div>
