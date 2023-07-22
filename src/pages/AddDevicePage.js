@@ -5,6 +5,18 @@ import { collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firesto
 import { v4 as uuidv4 } from 'uuid';
 import { Button, Modal } from 'react-bootstrap';
 import DeviceSensors from './DeviceSensors.js';
+import Select from 'react-select';
+
+
+// Sample list of options
+const typeOptions = [
+  { value: 'Option 1', label: 'Option 1' },
+  { value: 'Option 2', label: 'Option 2' },
+  { value: 'Option 3', label: 'Option 3' },
+  { value: 'Option 4', label: 'Option 4' },
+  // Add more options as needed
+];
+
 
 function AddDevicePage() {
   let { id } = useParams();
@@ -249,7 +261,17 @@ function AddDevicePage() {
                   </div>
                   <div className="mb-3">
                     <label>Type</label>
-                    <input type="text" ref={typeRef} className="form-control" />
+                      <Select
+                        options={typeOptions}
+                        ref={typeRef}
+                        onChange={(selectedOption) => {
+                          typeRef.current.value = selectedOption.value
+                        }}
+                        isClearable
+                        isSearchable
+                        placeholder="Select Type from our own list..."
+                      />
+                      <input type="text" ref={typeRef} className="form-control mt-2" />
                   </div>
                   <div className="mb-3">
                     <label>Deployment Location</label>
